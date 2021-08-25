@@ -1,23 +1,31 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
-const authRoutes = require('./routes/auth');
-
+const mongoose = require("mongoose");
+const authrouter = require("./routes/auth");
+const router = require("./routes/route");
+const cors = require("cors");
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+require("dotenv").config();
+
 app.use(cors());
+app.use("/user", authrouter);
+app.use("/api", router);
 
-//initialize routes
-// /auth/login
-app.use('/auth', authRoutes);
-
-
-
+//if (process.env.DataBase_Connection) {
+  //try {
+ //   mongoose.connect(process.env.DataBase_Connection, {
+  //    useNewUrlParser: true,
+  //  });
+  //} catch (err) {
+ //   console.log("errr  while connecting db", "errr");
+  //}
+//}
+//app.listen(4000, () => console.log("server is running"));
 
 mongoose.connect (
-    'mongodb+srv://niharika:HBuD33GZ8ZqdgamD@cluster0.2olws.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    process.env.DataBase_Connection
 ).then(result => {
     app.listen(4000);
 })
 .catch(err => console.log(err));
-//mongodb+srv://niharika:HBuD33GZ8ZqdgamD@cluster0.2olws.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
